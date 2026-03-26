@@ -1,5 +1,5 @@
 
-from PT import menu as menu_trainers
+from pt import menu as menu_trainers
 from alunos import menu_alunos
 
 def main():
