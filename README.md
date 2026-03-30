@@ -1,11 +1,5 @@
 # 🏋️ Sistema de Gestão de Ginásio
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/CLI-App-green?style=for-the-badge&logo=windowsterminal&logoColor=white" />
-  <img src="https://img.shields.io/badge/CRUD-Operations-orange?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/License-MIT-purple?style=for-the-badge" />
-</p>
 
 <p align="center">
   Sistema de gestão em linha de comandos (CLI) desenvolvido em Python para gerir <strong>Alunos</strong> e <strong>Personal Trainers</strong> de um ginásio, com validação de dados e feedback inspirado nos códigos de estado HTTP.
