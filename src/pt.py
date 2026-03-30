@@ -1,78 +1,80 @@
-# CRUD simples de Personal Trainer
+from utilities import validar_nome, validar_telefone, confirmar_acao
 
-# Lista que vai armazenar os trainers
 trainers = []
 
-# Função para listar todos
 def listar():
     if not trainers:
-        print("Nenhum personal trainer cadastrado.\n")
+        print("204 No Content - Nenhum personal trainer cadastrado.\n")
         return
-    print("\nLista de Personal Trainers:")
+    print("\n200 OK - Lista de Personal Trainers:")
     for i, t in enumerate(trainers):
         print(f"{i+1}. Nome: {t['nome']}, Especialidade: {t['especialidade']}, Telefone: {t['telefone']}")
     print()
 
-# Função para adicionar um trainer
 def adicionar():
-    nome = input("Nome: ")
-    especialidade = input("Especialidade: ")
-    telefone = input("Telefone: ")
-    trainers.append({"nome": nome, "especialidade": especialidade, "telefone": telefone})
-    print("Personal trainer adicionado!\n")
+    print("\n➕ Adicionar Personal Trainer")
+    nome = validar_nome("Nome: ")
+    especialidade = input("Especialidade: ").strip()
+    telefone = validar_telefone("Telefone: ")
 
-# Função para editar um trainer
+    trainers.append({"nome": nome, "especialidade": especialidade, "telefone": telefone})
+    print(f"201 Created - Personal Trainer '{nome}' adicionado!\n")
+
 def editar():
     listar()
     if not trainers:
         return
-    i = int(input("Digite o número do trainer que deseja editar: ")) - 1
+
+    entrada = input("Número do trainer a editar: ").strip()
+    if not entrada.isdigit():
+        print("400 Bad Request - Número inválido.\n")
+        return
+
+    i = int(entrada) - 1
     if 0 <= i < len(trainers):
         t = trainers[i]
-        t['nome'] = input(f"Nome ({t['nome']}): ") or t['nome']
-        t['especialidade'] = input(f"Especialidade ({t['especialidade']}): ") or t['especialidade']
-        t['telefone'] = input(f"Telefone ({t['telefone']}): ") or t['telefone']
-        print("Personal trainer atualizado!\n")
-    else:
-        print("Número inválido.\n")
+        print(f"\n✏️ A editar: {t['nome']} (deixe em branco para manter)")
 
-# Função para deletar um trainer
+        nome = input(f"Nome ({t['nome']}): ").strip()
+        if nome:
+            if nome.replace(" ", "").isalpha():
+                t['nome'] = nome.title()
+            else:
+                print("400 Bad Request - Nome inválido. Mantido anterior.")
+
+        especialidade = input(f"Especialidade ({t['especialidade']}): ").strip()
+        if especialidade:
+            t['especialidade'] = especialidade.capitalize()
+
+        telefone = input(f"Telefone ({t['telefone']}): ").strip()
+        if telefone:
+            numero = telefone.lstrip("+")
+            if numero.isdigit() and 9 <= len(numero) <= 15:
+                t['telefone'] = telefone
+            else:
+                print("400 Bad Request - Telefone inválido. Mantido anterior.")
+
+        print(f"200 OK - Trainer '{t['nome']}' atualizado!\n")
+    else:
+        print("404 Not Found - Trainer não encontrado.\n")
+
 def deletar():
     listar()
     if not trainers:
         return
-    i = int(input("Digite o número do trainer que deseja deletar: ")) - 1
+
+    entrada = input("Número do trainer a deletar: ").strip()
+    if not entrada.isdigit():
+        print("400 Bad Request - Número inválido.\n")
+        return
+
+    i = int(entrada) - 1
     if 0 <= i < len(trainers):
-        trainers.pop(i)
-        print("Personal trainer deletado!\n")
-    else:
-        print("Número inválido.\n")
-
-# Menu principal
-def menu():
-    while True:
-        print("=== CRUD Personal Trainer ===")
-        print("1. Listar")
-        print("2. Adicionar")
-        print("3. Editar")
-        print("4. Deletar")
-        print("5. Sair")
-        opcao = input("Escolha uma opção: ")
-
-        if opcao == "1":
-            listar()
-        elif opcao == "2":
-            adicionar()
-        elif opcao == "3":
-            editar()
-        elif opcao == "4":
-            deletar()
-        elif opcao == "5":
-            print("Saindo...")
-            break
+        nome = trainers[i]['nome']
+        if confirmar_acao(f"Tem a certeza que quer deletar '{nome}'? (s/n): "):
+            trainers.pop(i)
+            print(f"200 OK - Trainer '{nome}' deletado!\n")
         else:
-            print("Opção inválida!\n")
-
-# Executar o menu
-if __name__ == "__main__":
-    menu()
+            print("400 Bad Request - Ação cancelada.\n")
+    else:
+        print("404 Not Found - Trainer não encontrado.\n")
