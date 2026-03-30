@@ -1,79 +1,55 @@
-# Gestor-de-GYM-Ginásio
-Este projecto é um **sistema de gestão simples** para academias, permitindo gerir **Personal Trainers** e **Alunos** directamente no terminal.  
-O sistema é feito em **Python puro**, sem base de dados ou frameworks web.  
+🏋️ Sistema de Gestão de Ginásio
+Sistema de gestão em linha de comandos (CLI) desenvolvido em Python para gerir Alunos e Personal Trainers de um ginásio. Permite realizar operações CRUD completas com validação de dados e feedback inspirado nos códigos de estado HTTP.
 
----
+📁 Estrutura do Projeto
+├── main.py          # Ponto de entrada da aplicação
+├── alunos.py        # Módulo de gestão de alunos
+├── pt.py            # Módulo de gestão de personal trainers
+└── utilities.py     # Funções utilitárias de validação
 
-## 📂 Estrutura do projeto
+⚙️ Funcionalidades
+👤 Alunos (alunos.py)
+Cada aluno é composto pelos campos: Nome, Idade e Telefone.
+AçãoDescriçãoListarMostra todos os alunos registadosAdicionarCria um novo aluno com validação de dadosEditarAtualiza os dados de um aluno existente (campos em branco mantêm o valor anterior)DeletarRemove um aluno após confirmação
+🏃 Personal Trainers (pt.py)
+Cada trainer é composto pelos campos: Nome, Especialidade e Telefone.
+AçãoDescriçãoListarMostra todos os trainers registadosAdicionarCria um novo trainer com validação de dadosEditarAtualiza os dados de um trainer existente (campos em branco mantêm o valor anterior)DeletarRemove um trainer após confirmação
+🛠️ Utilitários (utilities.py)
+Funções partilhadas de validação usadas por ambos os módulos:
+
+validar_nome — aceita apenas letras e espaços
+validar_idade — aceita valores inteiros entre 5 e 120
+validar_telefone — aceita números com 9 a 15 dígitos (com suporte ao prefixo +)
+confirmar_acao — solicita confirmação s/n antes de ações destrutivas
 
 
-Gestor-de-GYM/
-│
-├─ main.py # Menu principal do sistema
-├─ personal_trainers.py # CRUD de Personal Trainers
-├─ alunos.py # CRUD de Alunos
-├─ README.html # Documentação detalhada do projeto
-└─ README.md # Este ficheiro
+▶️ Como Executar
+Pré-requisitos
 
+Python 3.x instalado
 
----
+Execução
+bashpython main.py
+Navegação no menu
+=== SISTEMA DE GESTÃO ===
 
-## 🎯 Objetivos do sistema
-
-- Permitir gerir Personal Trainers: adicionar, listar, editar e eliminar  
-- Permitir gerir Alunos: adicionar, listar, editar e eliminar  
-- Demonstrar organização de código em módulos separados e utilização de imports  
-- Fornecer uma base clara para aprendizagem de programação em Python com menus interativos  
-
----
-
-## ⚙️ Funcionalidades
-
-### Personal Trainers
-- Listar todos os personal trainers  
-- Adicionar novo personal trainer  
-- Editar personal trainer existente  
-- Eliminar personal trainer  
-
-### Alunos
-- Listar todos os alunos  
-- Adicionar novo aluno  
-- Editar aluno existente  
-- Eliminar aluno  
-
----
-
-## 📝 Como utilizar
-
-1. Certifique-se que todos os ficheiros estão na mesma pasta.  
-2. Execute o `main.py`:
-
-```bash
-python main.py
-O menu principal irá aparecer:
-=== Sistema de Academia ===
-1. Gerir Personal Trainers
-2. Gerir Alunos
+Escolha a entidade para gerenciar:
+1. Alunos
+2. Personal Trainers
 3. Sair
-Escolha a opção desejada e siga as instruções no ecrã.
-📖 Documentação detalhada
 
-Para ver a documentação completa e estruturada com exemplos, abre o ficheiro README.html
- no navegador.
+--- Alunos ---
+a. Listar
+b. Adicionar
+c. Editar
+d. Deletar
 
-Feito com ❤️ em Python.
+📡 Códigos de Resposta
+O sistema utiliza uma convenção inspirada nos códigos de estado HTTP para feedback ao utilizador:
+CódigoSignificado200 OKOperação realizada com sucesso201 CreatedRegisto criado com sucesso204 No ContentLista vazia, sem registos400 Bad RequestEntrada inválida ou ação cancelada404 Not FoundRegisto não encontrado
 
+📌 Notas
 
----
-
-✅ **Como usar no GitHub**:
-
-1. Salva este conteúdo como `README.md` na raiz do repositório.  
-2. Já tens o `README.html` na pasta, o GitHub vai mostrar o `README.md` como página inicial.  
-3. Quem visitar o repositório verá o resumo do projeto e pode abrir o HTML para detalhes.  
-
----
-
-Se quiseres, posso criar **uma versão ainda mais profissional** com **GIFs ou imagens do terminal** mostrando o menu e CRUD funcionando, para o GitHub ficar visualmente mais atraente.  
-
-Queres que eu faça isso?
+Os dados são guardados apenas em memória durante a execução. Ao sair do programa, os dados são perdidos.
+O sistema não utiliza base de dados nem ficheiros externos.
+Para persistência de dados, seria necessário integrar armazenamento em ficheiro (ex: JSON, CSV) ou base de dados.
