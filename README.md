@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  Sistema de gestão em linha de comandos (CLI) desenvolvido em Python para gerir <strong>Alunos</strong> e <strong>Personal Trainers</strong> de um ginásio, com validação de dados e feedback inspirado nos códigos de estado HTTP.
+  Sistema de gestão de ginásio desenvolvido em Python para gerir <strong>Alunos</strong> e <strong>Personal Trainers</strong> de um ginásio, com validação de dados e feedback inspirado nos códigos de estado HTTP.
 </p>
 
 ---
@@ -14,9 +14,6 @@
 - [Como Executar](#️-como-executar)
 - [Demo](#-demo)
 - [Códigos de Resposta](#-códigos-de-resposta)
-- [Melhorias Futuras](#-melhorias-futuras)
-- [Contribuir](#-contribuir)
-- [Licença](#-licença)
 
 ---
 
@@ -133,31 +130,7 @@ O sistema usa uma convenção inspirada nos códigos de estado HTTP:
 
 ---
 
-## 🚀 Melhorias Futuras
 
-- [ ] Persistência de dados em ficheiro JSON ou CSV
-- [ ] Associação de alunos a personal trainers
-- [ ] Pesquisa e filtragem de registos
-- [ ] Interface gráfica (GUI) ou web
-- [ ] Testes unitários
-
----
-
-## 🤝 Contribuir
-
-Contribuições são bem-vindas! Para contribuir:
-
-1. Faz um **fork** do projeto
-2. Cria uma branch para a tua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Faz commit das alterações (`git commit -m 'Adiciona nova funcionalidade'`)
-4. Faz push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Abre um **Pull Request**
-
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a licença MIT. Consulta o ficheiro [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
