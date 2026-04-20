@@ -1,24 +1,11 @@
-def validar_nome(msg):
-    while True:
-        nome = input(msg).strip()
-        if nome.replace(" ", "").isalpha():
-            return nome.title()
-        print("Nome inválido. Apenas letras.")
+def validar_nome(nome):
+    return nome.replace(" ", "").isalpha()
 
-def validar_idade(msg):
-    while True:
-        idade = input(msg).strip()
-        if idade.isdigit() and 5 <= int(idade) <= 120:
-            return int(idade)
-        print(" Idade inválida. (5-120)")
 
-def validar_telefone(msg):
-    while True:
-        telefone = input(msg).strip()
-        numero = telefone.lstrip("+")
-        if numero.isdigit() and 9 <= len(numero) <= 15:
-            return telefone
-        print(" Telefone inválido. (9-15 dígitos)")
+def validar_telefone(telefone):
+    numero = telefone.lstrip("+")
+    return numero.isdigit() and 9 <= len(numero) <= 15
+
 
 def confirmar_acao(msg):
     resp = input(msg).strip().lower()
