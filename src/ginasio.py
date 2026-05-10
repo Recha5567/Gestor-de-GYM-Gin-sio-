@@ -32,9 +32,10 @@ def adicionar(nome, morada, telefone, email, nif):
     return 201, ginasio
 
 
-def editar(indice, nome=None, morada=None, telefone=None, email=None, nif=None):
-    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(ginasios)):
-        return 404, "Ginásio não encontrado."
+def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
+    f = next((f for f in funcionarios if f["id"] == id), None)
+    if f is None:
+        return 404, "Funcionário não encontrado."
 
     g = ginasios[int(indice) - 1]
 
