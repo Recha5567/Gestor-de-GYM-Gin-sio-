@@ -22,9 +22,10 @@ def adicionar(nome, especialidade, telefone):
     return 201, pt
 
 
-def editar(indice, nome=None, especialidade=None, telefone=None):
-    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(trainers)):
-        return 404, "Trainer não encontrado."
+def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
+    f = next((f for f in funcionarios if f["id"] == id), None)
+    if f is None:
+        return 404, "Funcionário não encontrado."
 
     t = trainers[int(indice) - 1]
 
