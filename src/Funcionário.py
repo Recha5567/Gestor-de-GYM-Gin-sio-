@@ -41,8 +41,9 @@ def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inic
     return 201, funcionario
 
 
-def editar(indice, nome=None, telefone=None, morada=None, cargo=None, salario=None, data_fim=None, horario=None):
-    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(funcionarios)):
+def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, data_fim=None, horario=None):
+    f = next((f for f in funcionarios if f["id"] == id), None)
+    if f is None:
         return 404, "Funcionário não encontrado."
 
     f = funcionarios[int(indice) - 1]
