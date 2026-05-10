@@ -44,7 +44,9 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     return 200, t
 
 
-def deletar(indice):
-    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(trainers)):
+def deletar(id):
+    f = next((f for f in trainers if f["id"] == id), None)
+    if f is None:
         return 404, "Trainer não encontrado."
-    return 200, trainers.pop(int(indice) - 1)
+    trainers.remove(f)
+    return 200, f
