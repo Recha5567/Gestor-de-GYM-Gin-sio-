@@ -1,154 +1,184 @@
-from pt import listar, adicionar_pt
-from alunos import listar_alunos, adicionar_aluno, editar_aluno, deletar_aluno
+import alunos
+import pt
+import ginasio
+import Funcionário
 
 
-def mostrar_lista(dados, tipo):
-    if not dados:
-        print("Sem registos.")
+def mostrar_lista(resultado):
+    codigo, dados = resultado
+    if codigo != 200:
+        print(dados)
         return
-
-    print(f"\nLista de {tipo}:")
     for i, item in enumerate(dados, 1):
         print(f"{i}. {item}")
 
 
-# ---------------- ALUNOS ----------------
+def mostrar_resultado(resultado):
+    codigo, dados = resultado
+    if codigo in (200, 201):
+        print("Sucesso:", dados)
+    else:
+        print("Erro:", dados)
 
+
+# ----- ALUNOS ----
 def menu_alunos():
-    print("\n--- Alunos ---")
-    print("a. Listar")
-    print("b. Adicionar")
-    print("c. Editar")
-    print("d. Deletar")
+    print("\n1. Listar  2. Adicionar  3. Editar  4. Deletar")
+    op = input("Escolha: ").strip()
 
-    escolha = input("Escolha: ").lower()
+    if op == "1":
+        mostrar_lista(alunos.listar())
 
-    if escolha == "a":
-        _, alunos = listar_alunos()
-        mostrar_lista(alunos, "Alunos")
-
-    elif escolha == "b":
+    elif op == "2":
         nome = input("Nome: ")
         idade = input("Idade: ")
         telefone = input("Telefone: ")
+        mostrar_resultado(alunos.adicionar(nome, idade, telefone))
 
-        resultado = adicionar_aluno(nome, idade, telefone)
-        print(resultado)
+    elif op == "3":
+        mostrar_lista(alunos.listar())
+        idx = input("Nº do aluno: ")
+        nome = input("Novo nome (enter para manter): ")
+        idade = input("Nova idade (enter para manter): ")
+        telefone = input("Novo telefone (enter para manter): ")
+        mostrar_resultado(alunos.editar(idx, nome or None, idade or None, telefone or None))
 
-    elif escolha == "c":
-        _, alunos = listar_alunos()
-        mostrar_lista(alunos, "Alunos")
-
-        idx = input("Aluno a editar: ")
-        if not idx.isdigit():
-            print("Número inválido")
-            return
-
-        nome = input("Novo nome: ")
-        idade = input("Nova idade: ")
-        telefone = input("Novo telefone: ")
-
-        resultado = editar_aluno(idx, nome or None, idade or None, telefone or None)
-        print(resultado)
-
-    elif escolha == "d":
-        _, alunos = listar_alunos()
-        mostrar_lista(alunos, "Alunos")
-
-        idx = input("Aluno a deletar: ")
-        if not idx.isdigit():
-            print("Número inválido")
-            return
-
-        confirmar = input("Confirmar (s/n): ").lower()
-        if confirmar == "s":
-            resultado = deletar_aluno(idx)
-            print(resultado)
-        else:
-            print("Cancelado")
-
-    else:
-        print("Opção inválida")
+    elif op == "4":
+        mostrar_lista(alunos.listar())
+        idx = input("Nº do aluno: ")
+        if input("Confirmar? (s/n): ").lower() == "s":
+            mostrar_resultado(alunos.deletar(idx))
 
 
-# ---------------- TRAINERS ----------------
+# ----- PERSONAL TRAINERS ---
 
-def menu_trainers():
-    print("\n--- Personal Trainers ---")
-    print("a. Listar")
-    print("b. Adicionar")
-    print("c. Editar")
-    print("d. Deletar")
+def menu_pt():
+    print("\n1. Listar  2. Adicionar  3. Editar  4. Deletar")
+    op = input("Escolha: ").strip()
 
-    escolha = input("Escolha: ").lower()
+    if op == "1":
+        mostrar_lista(pt.listar())
 
-    if escolha == "a":
-        _, pts = listar()
-        mostrar_lista(pts, "Personal Trainers")
-
-    elif escolha == "b":
+    elif op == "2":
         nome = input("Nome: ")
         especialidade = input("Especialidade: ")
         telefone = input("Telefone: ")
+        mostrar_resultado(pt.adicionar(nome, especialidade, telefone))
 
-        resultado = adicionar_pt(nome, especialidade, telefone)
-        print(resultado)
+    elif op == "3":
+        mostrar_lista(pt.listar())
+        idx = input("Nº do trainer: ")
+        nome = input("Novo nome (enter para manter): ")
+        especialidade = input("Nova especialidade (enter para manter): ")
+        telefone = input("Novo telefone (enter para manter): ")
+        mostrar_resultado(pt.editar(idx, nome or None, especialidade or None, telefone or None))
 
-    elif escolha == "c":
-        _, pts = listar()
-        mostrar_lista(pts, "Personal Trainers")
-
-        idx = input("Trainer a editar: ")
-        if not idx.isdigit():
-            print("Número inválido")
-            return
-
-        nome = input("Novo nome: ")
-        especialidade = input("Nova especialidade: ")
-        telefone = input("Novo telefone: ")
-
-        resultado = editar(idx, nome or None, especialidade or None, telefone or None)
-        print(resultado)
-
-    elif escolha == "d":
-        _, pts = listar()
-        mostrar_lista(pts, "Personal Trainers")
-
-        idx = input("Trainer a deletar: ")
-        if not idx.isdigit():
-            print("Número inválido")
-            return
-
-        confirmar = input("Confirmar (s/n): ").lower()
-        if confirmar == "s":
-            resultado = deletar(idx)
-            print(resultado)
-        else:
-            print("Cancelado")
-
-    else:
-        print("Opção inválida")
+    elif op == "4":
+        mostrar_lista(pt.listar())
+        idx = input("Nº do trainer: ")
+        if input("Confirmar? (s/n): ").lower() == "s":
+            mostrar_resultado(pt.deletar(idx))
 
 
-# ---------------- MAIN ----------------
+# ---- GINÁSIOS -----
+
+def menu_ginasios():
+    print("\n1. Listar  2. Adicionar  3. Editar  4. Deletar")
+    op = input("Escolha: ").strip()
+
+    if op == "1":
+        mostrar_lista(ginasios.listar())
+
+    elif op == "2":
+        nome = input("Nome: ")
+        morada = input("Morada: ")
+        telefone = input("Telefone: ")
+        email = input("Email: ")
+        nif = input("NIF: ")
+        mostrar_resultado(ginasios.adicionar(nome, morada, telefone, email, nif))
+
+    elif op == "3":
+        mostrar_lista(ginasios.listar())
+        idx = input("Nº do ginásio: ")
+        nome = input("Novo nome (enter para manter): ")
+        morada = input("Nova morada (enter para manter): ")
+        telefone = input("Novo telefone (enter para manter): ")
+        email = input("Novo email (enter para manter): ")
+        nif = input("Novo NIF (enter para manter): ")
+        mostrar_resultado(ginasios.editar(idx, nome or None, morada or None, telefone or None, email or None, nif or None))
+
+    elif op == "4":
+        mostrar_lista(ginasios.listar())
+        idx = input("Nº do ginásio: ")
+        if input("Confirmar? (s/n): ").lower() == "s":
+            mostrar_resultado(ginasios.deletar(idx))
+
+
+# ---- FUNCIONÁRIOS -----
+
+def menu_funcionarios():
+    print("\n1. Listar  2. Adicionar  3. Editar  4. Deletar")
+    op = input("Escolha: ").strip()
+
+    if op == "1":
+        mostrar_lista(funcionarios.listar())
+
+    elif op == "2":
+        nome = input("Nome: ")
+        data_nasc = input("Data de nascimento: ")
+        telefone = input("Telefone: ")
+        morada = input("Morada: ")
+        cargo = input("Cargo (recepcionista/limpeza/gerente): ")
+        salario = input("Salário: ")
+        data_inicio = input("Data de início: ")
+        data_fim = input("Data de fim (enter para omitir): ")
+        horario = input("Horário: ")
+        id_gym = input("ID do ginásio: ")
+        mostrar_resultado(funcionarios.adicionar(nome, data_nasc, telefone, morada, cargo, salario, data_inicio, data_fim or None, horario, id_gym))
+
+    elif op == "3":
+        mostrar_lista(funcionarios.listar())
+        idx = input("Nº do funcionário: ")
+        nome = input("Novo nome (enter para manter): ")
+        telefone = input("Novo telefone (enter para manter): ")
+        morada = input("Nova morada (enter para manter): ")
+        cargo = input("Novo cargo (enter para manter): ")
+        salario = input("Novo salário (enter para manter): ")
+        data_fim = input("Nova data de fim (enter para manter): ")
+        horario = input("Novo horário (enter para manter): ")
+        mostrar_resultado(funcionarios.editar(idx, nome or None, telefone or None, morada or None, cargo or None, salario or None, data_fim or None, horario or None))
+
+    elif op == "4":
+        mostrar_lista(funcionarios.listar())
+        idx = input("Nº do funcionário: ")
+        if input("Confirmar? (s/n): ").lower() == "s":
+            mostrar_resultado(funcionarios.deletar(idx))
+
+
+# ---- MAIN -----
 
 def main():
+    menus = {
+        "1": ("Alunos", menu_alunos),
+        "2": ("Personal Trainers", menu_pt),
+        "3": ("Ginásios", menu_ginasios),
+        "4": ("Funcionários", menu_funcionarios),
+    }
+
     while True:
         print("\n=== SISTEMA ===")
-        print("1. Alunos")
-        print("2. Trainers")
-        print("3. Sair")
+        for k, (nome, _) in menus.items():
+            print(f"{k}. {nome}")
+        print("5. Sair")
 
-        opcao = input("Opção: ")
-
-        if opcao == "1":
-            menu_alunos()
-        elif opcao == "2":
-            menu_trainers()
-        elif opcao == "3":
+        op = input("Opção: ").strip()
+        if op == "5":
             break
+        elif op in menus:
+            print(f"\n--- {menus[op][0]} ---")
+            menus[op][1]()
         else:
-            print("Opção inválida")
+            print("Opção inválida.")
 
 
 if __name__ == "__main__":
