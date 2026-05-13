@@ -1,6 +1,20 @@
 from utilities import validar_nome, validar_telefone, validar_salario, validar_cargo
+import json
+import os
 
-funcionarios = []
+def carregar_dados(arquivo):
+    if os.path.exists(arquivo):
+        with open(arquivo, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+def guardar_dados(arquivo, dados):
+    with open(arquivo, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4)
+
+ARQUIVO = "funcionarios.json"
+funcionarios = carregar_dados(ARQUIVO)
 
 CARGOS_VALIDOS = ["recepcionista", "limpeza", "gerente"]
 
@@ -38,6 +52,7 @@ def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inic
         "id_gym": int(id_gym)
     }
     funcionarios.append(funcionario)
+    guardar_dados(ARQUIVO, funcionarios)
     return 201, funcionario
 
 
@@ -45,6 +60,7 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
+
 
     f = funcionarios[int(indice) - 1]
 
@@ -72,6 +88,7 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
     if horario:
         f["horario"] = horario.strip()
 
+    guardar_dados(ARQUIVO, funcionarios)
     return 200, f
 
 
@@ -79,3 +96,5 @@ def deletar(indice):
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(funcionarios)):
         return 404, "Funcionário não encontrado."
     return 200, funcionarios.pop(int(indice) - 1)
+removido = funcionarios.pop(int(indice) - 1)
+guardar_dados(ARQUIVO, funcionarios)
