@@ -1,8 +1,7 @@
 import alunos
 import pt
 import ginasio
-import Funcionário
-
+import funcionario
 
 def mostrar_lista(resultado):
     codigo, dados = resultado
