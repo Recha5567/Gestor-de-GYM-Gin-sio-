@@ -3,7 +3,7 @@ import os
 from utilities import validar_nome, validar_telefone
 
 ARQUIVO = "pt.json"
-pts = carregar_dados()
+
 
 
 def carregar_dados():
@@ -19,12 +19,14 @@ def guardar_dados(dados):
 
 
 def listar():
+    pts = carregar_dados()
     if not pts:
         return 204, "Nenhum personal trainer registado."
     return 200, pts
 
 
 def adicionar(nome, especialidade, telefone):
+    pts = carregar_dados()
     if not validar_nome(nome):
         return 400, "Nome inválido."
     if not especialidade.strip():
@@ -39,6 +41,7 @@ def adicionar(nome, especialidade, telefone):
 
 
 def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
+    pts = carregar_dados()
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
@@ -63,6 +66,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
 
 
 def deletar(id):
+    pts = carregar_dados()
     f = next((f for f in pts if f["id"] == id), None)
     if f is None:
         return 404, "Trainer não encontrado."
