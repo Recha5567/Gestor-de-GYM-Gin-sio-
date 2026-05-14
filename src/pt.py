@@ -1,19 +1,21 @@
-from utilities import validar_nome, validar_telefone
 import json
 import os
-def carregar_dados(arquivo):
-    if os.path.exists(arquivo):
-        with open(arquivo, "r", encoding="utf-8") as f:
+from utilities import validar_nome, validar_telefone
+
+ARQUIVO = "trainers.json"
+trainers = carregar_dados()
+
+
+def carregar_dados():
+    if os.path.exists(ARQUIVO):
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
 
 
-def guardar_dados(arquivo, dados):
-    with open(arquivo, "w", encoding="utf-8") as f:
+def guardar_dados(dados):
+    with open(ARQUIVO, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=4)
-
-ARQUIVO = "trainers.json"
-trainers = carregar_dados(ARQUIVO)
 
 
 def listar():
@@ -32,7 +34,7 @@ def adicionar(nome, especialidade, telefone):
 
     pt = {"nome": nome.title(), "especialidade": especialidade.strip().capitalize(), "telefone": telefone}
     trainers.append(pt)
-    guardar_dados(ARQUIVO, trainers)
+    guardar_dados(trainers)
     return 201, pt
 
 
@@ -40,7 +42,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
-    guardar_dados(ARQUIVO, trainers)
+    guardar_dados(trainers)
 
     t = trainers[int(indice) - 1]
 
@@ -56,7 +58,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     if telefone:
         t["telefone"] = telefone
 
-    guardar_dados(ARQUIVO, trainers)
+    guardar_dados(trainers)
     return 200, t
 
 
@@ -65,7 +67,5 @@ def deletar(id):
     if f is None:
         return 404, "Trainer não encontrado."
     trainers.remove(f)
-    guardar_dados(ARQUIVO, trainers)
+    guardar_dados(trainers)
     return 200, f
-
-
