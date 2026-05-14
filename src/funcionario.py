@@ -3,7 +3,7 @@ import os
 from utilities import validar_nome, validar_telefone, validar_salario, validar_cargo
 
 ARQUIVO = "funcionarios.json"
-funcionarios = carregar_dados()
+
 
 CARGOS_VALIDOS = ["recepcionista", "limpeza", "gerente"]
 
@@ -21,12 +21,14 @@ def guardar_dados(dados):
 
 
 def listar():
+    funcionarios = carregar_dados()
     if not funcionarios:
         return 204, "Nenhum funcionário registado."
     return 200, funcionarios
 
 
 def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inicio, data_fim, horario, id_gym):
+    funcionarios = carregar_dados()
     if not validar_nome(nome):
         return 400, "Nome inválido."
     if not validar_telefone(telefone):
@@ -58,6 +60,7 @@ def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inic
 
 
 def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, data_fim=None, horario=None):
+    funcionarios = carregar_dados()
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
@@ -93,6 +96,7 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
 
 
 def deletar(indice):
+    funcionarios = carregar_dados()
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(funcionarios)):
         return 404, "Funcionário não encontrado."
     removido = funcionarios.pop(int(indice) - 1)
