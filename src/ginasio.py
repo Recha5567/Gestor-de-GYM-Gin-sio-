@@ -3,7 +3,7 @@ import os
 from utilities import validar_nome, validar_telefone, validar_email, validar_nif
 
 ARQUIVO = "ginasios.json"
-ginasios = carregar_dados()
+
 
 
 def carregar_dados():
@@ -19,12 +19,14 @@ def guardar_dados(dados):
 
 
 def listar():
+    ginasios = carregar_dados()
     if not ginasios:
         return 204, "Nenhum ginásio registado."
     return 200, ginasios
 
 
 def adicionar(nome, morada, telefone, email, nif):
+    ginasios = carregar_dados()
     if not validar_nome(nome):
         return 400, "Nome inválido."
     if not morada.strip():
@@ -51,6 +53,7 @@ def adicionar(nome, morada, telefone, email, nif):
 
 
 def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
+    ginasios = carregar_dados()
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
@@ -83,6 +86,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
 
 
 def deletar(indice):
+    ginasios = carregar_dados()
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(ginasios)):
         return 404, "Ginásio não encontrado."
     removido = ginasios.pop(int(indice) - 1)
