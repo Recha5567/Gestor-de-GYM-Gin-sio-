@@ -1,20 +1,21 @@
-from utilities import validar_nome, validar_telefone, validar_email, validar_nif
 import json
 import os
+from utilities import validar_nome, validar_telefone, validar_email, validar_nif
 
-def carregar_dados(arquivo):
-    if os.path.exists(arquivo):
-        with open(arquivo, "r", encoding="utf-8") as f:
+ARQUIVO = "ginasios.json"
+ginasios = carregar_dados()
+
+
+def carregar_dados():
+    if os.path.exists(ARQUIVO):
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
 
 
-def guardar_dados(arquivo, dados):
-    with open(arquivo, "w", encoding="utf-8") as f:
+def guardar_dados(dados):
+    with open(ARQUIVO, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=4)
-
-ARQUIVO = "ginasios.json"
-ginasios = carregar_dados(ARQUIVO)
 
 
 def listar():
@@ -36,7 +37,7 @@ def adicionar(nome, morada, telefone, email, nif):
         return 400, "NIF inválido."
 
     ginasios.append(ginasio)
-    guardar_dados(ARQUIVO, ginasios)
+    guardar_dados(ginasios)
 
     ginasio = {
         "nome": nome.title(),
@@ -53,7 +54,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
-    guardar_dados(ARQUIVO, ginasios)
+    guardar_dados(ginasios)
 
     g = ginasios[int(indice) - 1]
 
@@ -77,14 +78,13 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     if nif:
         g["nif"] = nif
 
-    guardar_dados(ARQUIVO, ginasios)
+    guardar_dados(ginasios)
     return 200, g
 
 
 def deletar(indice):
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(ginasios)):
         return 404, "Ginásio não encontrado."
-    return 200, ginasios.pop(int(indice) - 1)
-removido = ginasios.pop(int(indice) - 1)
-guardar_dados(ARQUIVO, ginasios)
-
+    removido = ginasios.pop(int(indice) - 1)
+    guardar_dados(ginasios)
+    return 200, removido
