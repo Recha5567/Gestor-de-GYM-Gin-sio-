@@ -1,15 +1,32 @@
+import json
+import os
 from utilities import validar_nome, validar_telefone
 
-trainers = []
+ARQUIVO = "pt.json"
+
+
+
+def carregar_dados():
+    if os.path.exists(ARQUIVO):
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+def guardar_dados(dados):
+    with open(ARQUIVO, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4)
 
 
 def listar():
-    if not trainers:
+    pts = carregar_dados()
+    if not pts:
         return 204, "Nenhum personal trainer registado."
-    return 200, trainers
+    return 200, pts
 
 
 def adicionar(nome, especialidade, telefone):
+    pts = carregar_dados()
     if not validar_nome(nome):
         return 400, "Nome inválido."
     if not especialidade.strip():
@@ -18,16 +35,19 @@ def adicionar(nome, especialidade, telefone):
         return 400, "Telefone inválido."
 
     pt = {"nome": nome.title(), "especialidade": especialidade.strip().capitalize(), "telefone": telefone}
-    trainers.append(pt)
+    pts.append(pt)
+    guardar_dados(pts)
     return 201, pt
 
 
 def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
+    pts = carregar_dados()
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
+    guardar_dados(pts)
 
-    t = trainers[int(indice) - 1]
+    t = pts[int(indice) - 1]
 
     if nome and not validar_nome(nome):
         return 400, "Nome inválido."
@@ -41,12 +61,15 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     if telefone:
         t["telefone"] = telefone
 
+    guardar_dados(pts)
     return 200, t
 
 
 def deletar(id):
-    f = next((f for f in trainers if f["id"] == id), None)
+    pts = carregar_dados()
+    f = next((f for f in pts if f["id"] == id), None)
     if f is None:
         return 404, "Trainer não encontrado."
-    trainers.remove(f)
+    pts.remove(f)
+    guardar_dados(pts)
     return 200, f

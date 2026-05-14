@@ -1,17 +1,34 @@
+import json
+import os
 from utilities import validar_nome, validar_telefone, validar_salario, validar_cargo
 
-funcionarios = []
+ARQUIVO = "funcionarios.json"
+
 
 CARGOS_VALIDOS = ["recepcionista", "limpeza", "gerente"]
 
 
+def carregar_dados():
+    if os.path.exists(ARQUIVO):
+        with open(ARQUIVO, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+def guardar_dados(dados):
+    with open(ARQUIVO, "w", encoding="utf-8") as f:
+        json.dump(dados, f, ensure_ascii=False, indent=4)
+
+
 def listar():
+    funcionarios = carregar_dados()
     if not funcionarios:
         return 204, "Nenhum funcionário registado."
     return 200, funcionarios
 
 
 def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inicio, data_fim, horario, id_gym):
+    funcionarios = carregar_dados()
     if not validar_nome(nome):
         return 400, "Nome inválido."
     if not validar_telefone(telefone):
@@ -38,10 +55,12 @@ def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inic
         "id_gym": int(id_gym)
     }
     funcionarios.append(funcionario)
+    guardar_dados(funcionarios)
     return 201, funcionario
 
 
 def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, data_fim=None, horario=None):
+    funcionarios = carregar_dados()
     f = next((f for f in funcionarios if f["id"] == id), None)
     if f is None:
         return 404, "Funcionário não encontrado."
@@ -72,10 +91,14 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
     if horario:
         f["horario"] = horario.strip()
 
+    guardar_dados(funcionarios)
     return 200, f
 
 
 def deletar(indice):
+    funcionarios = carregar_dados()
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(funcionarios)):
         return 404, "Funcionário não encontrado."
-    return 200, funcionarios.pop(int(indice) - 1)
+    removido = funcionarios.pop(int(indice) - 1)
+    guardar_dados(funcionarios)
+    return 200, removido
