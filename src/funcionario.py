@@ -1,7 +1,6 @@
 import json
 import os
-from utilities import validar_nome, validar_telefone, validar_salario, validar_cargo
-from utils import logger
+from utilities import validar_nome, validar_telefone, validar_salario, validar_cargo, logger
 
 ARQUIVO = "funcionarios.json"
 
@@ -43,27 +42,27 @@ def adicionar(nome, data_nascimento, telefone, morada, cargo, salario, data_inic
     funcionarios = carregar_dados()
 
     if not validar_nome(nome):
-        logger.warning(f"Nome inválido: {nome}")
+        logger.ERROR(f"Nome inválido: {nome}")
         return 400, "Nome inválido."
 
     if not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido: {telefone}")
+        logger.ERROR(f"Telefone inválido: {telefone}")
         return 400, "Telefone inválido."
 
     if not morada.strip():
-        logger.warning("Morada inválida")
+        logger.ERROR("Morada inválida")
         return 400, "Morada inválida."
 
     if not validar_cargo(cargo, CARGOS_VALIDOS):
-        logger.warning(f"Cargo inválido: {cargo}")
+        logger.ERROR(f"Cargo inválido: {cargo}")
         return 400, f"Cargo inválido. Válidos: {', '.join(CARGOS_VALIDOS)}."
 
     if not validar_salario(salario):
-        logger.warning(f"Salário inválido: {salario}")
+        logger.ERROR(f"Salário inválido: {salario}")
         return 400, "Salário inválido."
 
     if not str(id_gym).isdigit():
-        logger.warning(f"ID de ginásio inválido: {id_gym}")
+        logger.ERROR(f"ID de ginásio inválido: {id_gym}")
         return 400, "ID de ginásio inválido."
 
     funcionario = {
@@ -96,17 +95,17 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
     f = next((f for f in funcionarios if f["id"] == id), None)
 
     if f is None:
-        logger.warning(f"Funcionário não encontrado: {id}")
+        logger.ERROR(f"Funcionário não encontrado: {id}")
         return 404, "Funcionário não encontrado."
 
     f = funcionarios[int(indice) - 1]
 
     if nome and not validar_nome(nome):
-        logger.warning(f"Nome inválido na edição: {nome}")
+        logger.ERROR(f"Nome inválido na edição: {nome}")
         return 400, "Nome inválido."
 
     if telefone and not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido na edição: {telefone}")
+        logger.ERROR(f"Telefone inválido na edição: {telefone}")
         return 400, "Telefone inválido."
 
     if cargo and not validar_cargo(cargo, CARGOS_VALIDOS):
@@ -114,7 +113,7 @@ def editar(id, nome=None, telefone=None, morada=None, cargo=None, salario=None, 
         return 400, f"Cargo inválido. Válidos: {', '.join(CARGOS_VALIDOS)}."
 
     if salario and not validar_salario(salario):
-        logger.warning(f"Salário inválido na edição: {salario}")
+        logger.ERROR(f"Salário inválido na edição: {salario}")
         return 400, "Salário inválido."
 
     if nome:
@@ -150,7 +149,7 @@ def deletar(indice):
     funcionarios = carregar_dados()
 
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(funcionarios)):
-        logger.warning(f"Funcionário não encontrado para remoção: {indice}")
+        logger.ERROR(f"Funcionário não encontrado para remoção: {indice}")
         return 404, "Funcionário não encontrado."
 
     removido = funcionarios.pop(int(indice) - 1)
