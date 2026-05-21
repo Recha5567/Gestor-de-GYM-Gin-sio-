@@ -1,3 +1,20 @@
+import logging
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s | %(levelname)-8s | %(message)s",
+    handlers=[
+        logging.FileHandler(f"{LOG_DIR}/gestor.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger("gestor")
+
+
 def validar_nome(nome):
     return nome.replace(" ", "").isalpha()
 
