@@ -1,87 +1,117 @@
-from utils import logger
+# ========================= alunos.py =========================
+
 import json
 import os
 from utilities import validar_nome, validar_telefone, validar_idade
+from utils import logger
 
 ARQUIVO = "alunos.json"
 
 def carregar_dados():
+    logger.info("A carregar dados dos alunos")
     if os.path.exists(ARQUIVO):
         with open(ARQUIVO, "r", encoding="utf-8") as f:
             return json.load(f)
-            logger.info("A carregar dados dos alunos")
     return []
 
 
 def guardar_dados(dados):
+    logger.info("A guardar dados dos alunos")
     with open(ARQUIVO, "w", encoding="utf-8") as f:
         json.dump(dados, f, ensure_ascii=False, indent=4)
-logger.info("A guardar dados dos alunos")
+
+
 
 
 def listar():
     logger.info("Listagem de alunos solicitada")
     alunos = carregar_dados()
     if not alunos:
+        logger.warning("Nenhum aluno registado")
         return 204, "Nenhum aluno registado."
     return 200, alunos
 
 
 def adicionar(nome, idade, telefone):
+    logger.info(f"Tentativa de adicionar aluno: {nome}")
+
     alunos = carregar_dados()
-logger.warning(f"Tentativa de adicionar aluno com nome inválido: {nome}")
-logger.warning(f"Tentativa de adicionar aluno com idade inválida: {idade}")
-logger.warning(f"Tentativa de adicionar aluno com telefone inválido: {telefone}")
+
     if not validar_nome(nome):
+        logger.warning(f"Nome inválido: {nome}")
         return 400, "Nome inválido."
+
     if not validar_idade(idade):
+        logger.warning(f"Idade inválida: {idade}")
         return 400, "Idade inválida."
+
     if not validar_telefone(telefone):
+        logger.warning(f"Telefone inválido: {telefone}")
         return 400, "Telefone inválido."
-logger.info(f"Aluno adicionado: {nome}")
+
 
     aluno = {"nome": nome.title(), "idade": int(idade), "telefone": telefone}
     alunos.append(aluno)
+
     guardar_dados(alunos)
+
+    logger.info(f"Aluno adicionado com sucesso: {nome}")
+
     return 201, aluno
 
 
 def editar(indice, nome=None, idade=None, telefone=None):
+    logger.info(f"Tentativa de editar aluno: {indice}")
+
     alunos = carregar_dados()
+
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(alunos)):
-logger.warning(f"Tentativa de editar aluno inexistente: {indice}")
+        logger.warning(f"Aluno não encontrado: {indice}")
         return 404, "Aluno não encontrado."
 
     a = alunos[int(indice) - 1]
 
-logger.warning(f"Nome inválido na edição do aluno {indice}: {nome}")
-logger.warning(f"Idade inválida na edição do aluno {indice}: {idade}")
-logger.warning(f"Telefone inválido na edição do aluno {indice}: {telefone}")
     if nome and not validar_nome(nome):
+        logger.warning(f"Nome inválido na edição: {nome}")
         return 400, "Nome inválido."
+
     if idade and not validar_idade(idade):
+        logger.warning(f"Idade inválida na edição: {idade}")
         return 400, "Idade inválida."
+
     if telefone and not validar_telefone(telefone):
+        logger.warning(f"Telefone inválido na edição: {telefone}")
         return 400, "Telefone inválido."
 
     if nome:
         a["nome"] = nome.title()
+
     if idade:
         a["idade"] = int(idade)
+
     if telefone:
         a["telefone"] = telefone
-logger.info(f"Aluno editado: {indice}")
+
     guardar_dados(alunos)
+
+    logger.info(f"Aluno editado com sucesso: {indice}")
+
     return 200, a
 
 
 def deletar(indice):
-    alunos = carregar_dados()
-    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(alunos)):
-        logger.warning(f"Tentativa de remover aluno inexistente: {indice}")
-        return 404, "Aluno não encontrado."
-    aluno_removido = alunos.pop(int(indice) - 1)
-    logger.info(f"Aluno removido: {indice}")
-    guardar_dados(alunos)
-    return 200, aluno_removido
+    logger.info(f"Tentativa de remover aluno: {indice}")
 
+    alunos = carregar_dados()
+
+    if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(alunos)):
+        logger.warning(f"Aluno não encontrado para remoção: {indice}")
+        return 404, "Aluno não encontrado."
+
+    aluno_removido = alunos.pop(int(indice) - 1)
+
+    guardar_dados(alunos)
+
+    logger.info(f"Aluno removido com sucesso: {indice}")
+
+    return 200, aluno_removido
