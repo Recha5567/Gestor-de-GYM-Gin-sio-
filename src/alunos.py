@@ -2,8 +2,8 @@
 
 import json
 import os
-from utilities import validar_nome, validar_telefone, validar_idade
-from utils import logger
+from utilities import validar_nome, validar_telefone, validar_idade, logger
+
 
 ARQUIVO = "alunos.json"
 
@@ -27,7 +27,7 @@ def listar():
     logger.info("Listagem de alunos solicitada")
     alunos = carregar_dados()
     if not alunos:
-        logger.warning("Nenhum aluno registado")
+        logger.error("Nenhum aluno registado")
         return 204, "Nenhum aluno registado."
     return 200, alunos
 
@@ -38,15 +38,15 @@ def adicionar(nome, idade, telefone):
     alunos = carregar_dados()
 
     if not validar_nome(nome):
-        logger.warning(f"Nome inválido: {nome}")
+        logger.error(f"Nome inválido: {nome}")
         return 400, "Nome inválido."
 
     if not validar_idade(idade):
-        logger.warning(f"Idade inválida: {idade}")
+        logger.error(f"Idade inválida: {idade}")
         return 400, "Idade inválida."
 
     if not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido: {telefone}")
+        logger.error(f"Telefone inválido: {telefone}")
         return 400, "Telefone inválido."
 
 
@@ -66,21 +66,21 @@ def editar(indice, nome=None, idade=None, telefone=None):
     alunos = carregar_dados()
 
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(alunos)):
-        logger.warning(f"Aluno não encontrado: {indice}")
+        logger.error(f"Aluno não encontrado: {indice}")
         return 404, "Aluno não encontrado."
 
     a = alunos[int(indice) - 1]
 
     if nome and not validar_nome(nome):
-        logger.warning(f"Nome inválido na edição: {nome}")
+        logger.error(f"Nome inválido na edição: {nome}")
         return 400, "Nome inválido."
 
     if idade and not validar_idade(idade):
-        logger.warning(f"Idade inválida na edição: {idade}")
+        logger.error(f"Idade inválida na edição: {idade}")
         return 400, "Idade inválida."
 
     if telefone and not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido na edição: {telefone}")
+        logger.error(f"Telefone inválido na edição: {telefone}")
         return 400, "Telefone inválido."
 
     if nome:
@@ -105,7 +105,7 @@ def deletar(indice):
     alunos = carregar_dados()
 
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(alunos)):
-        logger.warning(f"Aluno não encontrado para remoção: {indice}")
+        logger.error(f"Aluno não encontrado para remoção: {indice}")
         return 404, "Aluno não encontrado."
 
     aluno_removido = alunos.pop(int(indice) - 1)
