@@ -1,9 +1,7 @@
-# ========================= ginasios.py =========================
 
 import json
 import os
-from utilities import validar_nome, validar_telefone, validar_email, validar_nif
-from utils import logger
+from utilities import validar_nome, validar_telefone, validar_email, validar_nif, logger
 
 ARQUIVO = "ginasios.json"
 
@@ -43,23 +41,23 @@ def adicionar(nome, morada, telefone, email, nif):
     ginasios = carregar_dados()
 
     if not validar_nome(nome):
-        logger.warning(f"Nome inválido: {nome}")
+        logger.ERROR(f"Nome inválido: {nome}")
         return 400, "Nome inválido."
 
     if not morada.strip():
-        logger.warning("Morada inválida")
+        logger.ERROR("Morada inválida")
         return 400, "Morada inválida."
 
     if not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido: {telefone}")
+        logger.ERROR(f"Telefone inválido: {telefone}")
         return 400, "Telefone inválido."
 
     if not validar_email(email):
-        logger.warning(f"Email inválido: {email}")
+        logger.ERROR(f"Email inválido: {email}")
         return 400, "Email inválido."
 
     if not validar_nif(nif):
-        logger.warning(f"NIF inválido: {nif}")
+        logger.ERROR(f"NIF inválido: {nif}")
         return 400, "NIF inválido."
 
     ginasio = {
@@ -87,7 +85,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     f = next((f for f in funcionarios if f["id"] == id), None)
 
     if f is None:
-        logger.warning(f"Ginásio não encontrado: {id}")
+        logger.ERROR(f"Ginásio não encontrado: {id}")
         return 404, "Funcionário não encontrado."
 
     guardar_dados(ginasios)
@@ -95,19 +93,19 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     g = ginasios[int(indice) - 1]
 
     if nome and not validar_nome(nome):
-        logger.warning(f"Nome inválido na edição: {nome}")
+        logger.ERROR(f"Nome inválido na edição: {nome}")
         return 400, "Nome inválido."
 
     if telefone and not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido na edição: {telefone}")
+        logger.ERROR(f"Telefone inválido na edição: {telefone}")
         return 400, "Telefone inválido."
 
     if email and not validar_email(email):
-        logger.warning(f"Email inválido na edição: {email}")
+        logger.ERROR(f"Email inválido na edição: {email}")
         return 400, "Email inválido."
 
     if nif and not validar_nif(nif):
-        logger.warning(f"NIF inválido na edição: {nif}")
+        logger.ERROR(f"NIF inválido na edição: {nif}")
         return 400, "NIF inválido."
 
     if nome:
@@ -138,7 +136,7 @@ def deletar(indice):
     ginasios = carregar_dados()
 
     if not str(indice).isdigit() or not (0 <= int(indice) - 1 < len(ginasios)):
-        logger.warning(f"Ginásio não encontrado para remoção: {indice}")
+        logger.ERROR(f"Ginásio não encontrado para remoção: {indice}")
         return 404, "Ginásio não encontrado."
 
     removido = ginasios.pop(int(indice) - 1)
