@@ -1,7 +1,6 @@
 import json
 import os
-from utilities import validar_nome, validar_telefone
-from utils import logger
+from utilities import validar_nome, validar_telefone, logger
 
 ARQUIVO = "pt.json"
 
@@ -32,15 +31,15 @@ def adicionar(nome, especialidade, telefone):
     pts = carregar_dados()
 
     if not validar_nome(nome):
-        logger.warning(f"Nome inválido: {nome}")
+        logger.ERROR(f"Nome inválido: {nome}")
         return 400, "Nome inválido."
 
     if not especialidade.strip():
-        logger.warning("Especialidade inválida")
+        logger.ERROR("Especialidade inválida")
         return 400, "Especialidade inválida."
 
     if not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido: {telefone}")
+        logger.ERROR(f"Telefone inválido: {telefone}")
         return 400, "Telefone inválido."
 
     pt = {
@@ -63,7 +62,7 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     f = next((f for f in funcionarios if f["id"] == id), None)
 
     if f is None:
-        logger.warning(f"PT não encontrado: {id}")
+        logger.ERROR(f"PT não encontrado: {id}")
         return 404, "Funcionário não encontrado."
 
     guardar_dados(pts)
@@ -71,11 +70,11 @@ def editar(id, nome=None, morada=None, telefone=None, email=None, nif=None):
     t = pts[int(indice) - 1]
 
     if nome and not validar_nome(nome):
-        logger.warning(f"Nome inválido na edição: {nome}")
+        logger.ERROR(f"Nome inválido na edição: {nome}")
         return 400, "Nome inválido."
 
     if telefone and not validar_telefone(telefone):
-        logger.warning(f"Telefone inválido na edição: {telefone}")
+        logger.ERROR(f"Telefone inválido na edição: {telefone}")
         return 400, "Telefone inválido."
 
     if nome:
@@ -100,7 +99,7 @@ def deletar(id):
     f = next((f for f in pts if f["id"] == id), None)
 
     if f is None:
-        logger.warning(f"PT não encontrado para remoção: {id}")
+        logger.ERROR(f"PT não encontrado para remoção: {id}")
         return 404, "Trainer não encontrado."
 
     pts.remove(f)
